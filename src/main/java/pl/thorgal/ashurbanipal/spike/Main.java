@@ -1,10 +1,12 @@
 package pl.thorgal.ashurbanipal.spike;
 
 import javafx.application.Application;
+import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 /**
@@ -12,6 +14,10 @@ import javafx.stage.Stage;
  *
  */
 public class Main extends Application {
+
+	private static final int PORT_NUMBER = 48127;
+	private Scene scene;
+	private TextField hostInput;
 
 	/**
 	 * Required to start the jar as an executable.
@@ -25,20 +31,29 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		primaryStage.setTitle("Hello World!");
+		primaryStage.setTitle("Connectivity Test");
 
-		TextArea textArea = new TextArea();
-
-		Button button = new Button();
-		button.setText("Say 'Hello World'");
-		button.setOnAction(e -> {
-			textArea.appendText("Hello World!\n");
+		Button serverButton = new Button("Start server at port: " + PORT_NUMBER);
+		serverButton.setOnAction(e -> {
+			Server server = new Server();
+			scene.setRoot(server.getGroupNode());
+			server.startListeningForConnections(PORT_NUMBER);
 		});
 
-		BorderPane root = new BorderPane(textArea);
-		root.setTop(button);
+		Button clientButton = new Button("Start client");
+		clientButton.setOnAction(e -> {
+			Client client = new Client();
+			scene.setRoot(client.getGroupNode());
+			client.connectToServer(hostInput.getText(), PORT_NUMBER);
+		});
 
-		primaryStage.setScene(new Scene(root, 300, 250));
+		hostInput = new TextField("localhost");
+		HBox clientRequestBox = new HBox(hostInput, clientButton);
+		FlowPane panel = new FlowPane(Orientation.VERTICAL);
+		panel.getChildren().addAll(serverButton, clientRequestBox);
+
+		scene = new Scene(panel, 300, 250);
+		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 }
