@@ -15,9 +15,9 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
-	private static final int PORT_NUMBER = 48127;
 	private Scene scene;
 	private TextField hostInput;
+	private TextField portInput;
 
 	/**
 	 * Required to start the jar as an executable.
@@ -33,24 +33,27 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Connectivity Test");
 
-		Button serverButton = new Button("Start server at port: " + PORT_NUMBER);
+		Button serverButton = new Button("Start server");
 		serverButton.setOnAction(e -> {
 			Server server = new Server();
 			scene.setRoot(server.getGroupNode());
-			server.startListeningForConnections(PORT_NUMBER);
+			server.startListeningForConnections(Integer.parseInt(portInput.getText()));
 		});
 
 		Button clientButton = new Button("Start client");
 		clientButton.setOnAction(e -> {
 			Client client = new Client();
 			scene.setRoot(client.getGroupNode());
-			client.connectToServer(hostInput.getText(), PORT_NUMBER);
+			client.connectToServer(hostInput.getText(), Integer.parseInt(portInput.getText()));
 		});
+		HBox buttonsBox = new HBox(serverButton, clientButton);
 
 		hostInput = new TextField("localhost");
-		HBox clientRequestBox = new HBox(hostInput, clientButton);
+		portInput = new TextField("50255");
+		HBox inputBox = new HBox(hostInput, portInput);
+
 		FlowPane panel = new FlowPane(Orientation.VERTICAL);
-		panel.getChildren().addAll(serverButton, clientRequestBox);
+		panel.getChildren().addAll(inputBox, buttonsBox);
 
 		scene = new Scene(panel, 300, 250);
 		primaryStage.setScene(scene);
