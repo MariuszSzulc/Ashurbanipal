@@ -19,6 +19,10 @@ public class Main extends Application {
 	private TextField hostInput;
 	private TextField portInput;
 
+	private UpnpConfiguration upnpConfiguration = new UpnpConfiguration();
+	private TextField forwardingHostInput;
+	private TextField forwardingPortInput;
+
 	/**
 	 * Required to start the jar as an executable.
 	 *
@@ -33,6 +37,18 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Connectivity Test");
 
+		// Port forwarding stuff
+		Button registerUpnpButton = new Button("Forward the port");
+		registerUpnpButton.setOnAction(e -> {
+			upnpConfiguration.createPortForwardingRule(forwardingHostInput.getText(),
+					Integer.parseInt(forwardingPortInput.getText()));
+		});
+
+		forwardingHostInput = new TextField("192.168.5.68");
+		forwardingPortInput = new TextField("50255");
+		HBox forwardingBox = new HBox(forwardingHostInput, forwardingPortInput);
+
+		// Client server stuff
 		Button serverButton = new Button("Start server");
 		serverButton.setOnAction(e -> {
 			Server server = new Server();
@@ -53,10 +69,15 @@ public class Main extends Application {
 		HBox inputBox = new HBox(hostInput, portInput);
 
 		FlowPane panel = new FlowPane(Orientation.VERTICAL);
-		panel.getChildren().addAll(inputBox, buttonsBox);
+		panel.getChildren().addAll(forwardingBox, registerUpnpButton, inputBox, buttonsBox);
 
 		scene = new Scene(panel, 300, 250);
 		primaryStage.setScene(scene);
 		primaryStage.show();
+	}
+
+	@Override
+	public void stop() {
+		upnpConfiguration.cleanUp();
 	}
 }
