@@ -13,17 +13,12 @@
 		<java.version>1.8</java.version>
 	</properties>
 
-	<repositories>
-		<repository>
-			<id>4thline-repo</id>
-			<url>http://4thline.org/m2</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-
 	<dependencies>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.7</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -31,9 +26,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.fourthline.cling</groupId>
-			<artifactId>cling-support</artifactId>
-			<version>2.0.1</version>
+			<groupId>com.offbynull.portmapper</groupId>
+			<artifactId>portmapper</artifactId>
+			<version>2.0.4</version>
 		</dependency>
 	</dependencies>
 

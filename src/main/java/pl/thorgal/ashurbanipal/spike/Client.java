@@ -1,10 +1,8 @@
 //this is git status test //
 package pl.thorgal.ashurbanipal.spike;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -52,10 +50,7 @@ public class Client {
 			Socket echoSocket = new Socket(hostName, portNumber);
 			serverPipe = new PrintWriter(echoSocket.getOutputStream(), true);
 
-		} catch (UnknownHostException e) {
-			textArea.appendText(e.getLocalizedMessage() + '\n');
-
-		} catch (IOException e) {
+		} catch (Exception e) {
 			textArea.appendText(e.getLocalizedMessage() + '\n');
 		}
 	}
